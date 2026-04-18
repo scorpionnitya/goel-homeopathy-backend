@@ -7,11 +7,7 @@ const consultationSchema = new mongoose.Schema({
   phone: String,
   date: String,
   time: String,
-  problem: String,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+  problem: String
+}, { timestamps: true });
 
 module.exports = mongoose.model("Consultation", consultationSchema);
