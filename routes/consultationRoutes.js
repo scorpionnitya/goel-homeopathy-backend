@@ -4,30 +4,33 @@ const Consultation = require("../models/Consultation");
 
 router.post("/", async (req, res) => {
   try {
-    console.log("Incoming Data:", req.body);
+    const newConsultation = new Consultation(req.body);
 
-    const consultation = new Consultation(req.body);
+    const savedData = await newConsultation.save();
 
-    await consultation.save();
-
-    res.status(200).json({
+    res.status(201).json({
       success: true,
-      message: "Consultation Booked Successfully"
+      message: "Appointment booked successfully",
+      data: savedData
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("SAVE ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message: "Server Error"
+      message: "Database save failed"
     });
   }
 });
 
 router.get("/", async (req, res) => {
-  const data = await Consultation.find();
-  res.json(data);
+  try {
+    const data = await Consultation.find();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching data" });
+  }
 });
 
 module.exports = router;
