@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const consultationRoutes = require("./routes/consultationRoutes");
+app.use("/api/consultation", consultationRoutes);
 
 const app = express();
 
