@@ -2,50 +2,32 @@ const express = require("express");
 const router = express.Router();
 const Consultation = require("../models/Consultation");
 
-// POST - Save Consultation Booking
 router.post("/", async (req, res) => {
   try {
-    const newConsultation = new Consultation({
-      name: req.body.name,
-      age: req.body.age,
-      gender: req.body.gender,
-      phone: req.body.phone,
-      date: req.body.date,
-      time: req.body.time,
-      problem: req.body.problem,
-    });
+    console.log("Incoming Data:", req.body);
 
-    await newConsultation.save();
+    const consultation = new Consultation(req.body);
 
-    res.status(201).json({
+    await consultation.save();
+
+    res.status(200).json({
       success: true,
-      message: "Consultation booked successfully",
-      data: newConsultation,
+      message: "Consultation Booked Successfully"
     });
+
   } catch (error) {
     console.log(error);
+
     res.status(500).json({
       success: false,
-      message: "Error booking consultation",
+      message: "Server Error"
     });
   }
 });
 
-// GET - View all consultations
 router.get("/", async (req, res) => {
-  try {
-    const consultations = await Consultation.find().sort({ createdAt: -1 });
-
-    res.status(200).json({
-      success: true,
-      data: consultations,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error fetching consultations",
-    });
-  }
+  const data = await Consultation.find();
+  res.json(data);
 });
 
 module.exports = router;
