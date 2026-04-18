@@ -8,6 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/orders", require("./routes/orderRoutes"));
+app.use("/api/consultation", require("./routes/consultationRoutes"));
 app.use("/api/chat", require("./routes/aiRoutes"));
 
 mongoose.connect(process.env.MONGO_URI)
