@@ -97,10 +97,21 @@ router.post("/", (req, res) => {
     medicines.push("Hamamelis", "Phosphorus", "Ipecacuanha");
   }
 
-  else {
+  else if (msg.includes("back pain") || msg.includes("lower back pain") || msg.includes("kamr dard")) { 
     reply =
-      "Aapke symptoms clear nahi hain. Kripya thoda aur detail mein batayein ya doctor se consult karein.";
-    medicines.push("Consult Doctor");
+      "Aapko back pain ke symptoms lag rahe hain. Proper posture maintain karein aur regular stretching exercises karein.";
+    medicines.push("Rhus Toxicodendron", "Arnica");
+  }
+   else if (msg.includes("allergy") || msg.includes("allergic reaction") || msg.includes("allergy symptoms")) { 
+    reply =
+      "Aapko allergy ke symptoms lag rahe hain. Affected area ko clean rakhein aur irritants se bachke rahen.";
+    medicines.push("Rhus Toxicodendron", "Allium Cepa");
+  }
+
+   else if (msg.includes("sore throat") || msg.includes("gala dard") || msg.includes("throat pain")) { 
+    reply =
+      "Aapko sore throat ke symptoms lag rahe hain. Warm salt water gargle karein aur rest karein.";
+    medicines.push("Belladonna", "Mercurius Solubilis");
   }
 
   // 🔥 FINAL RESPONSE FORMAT
