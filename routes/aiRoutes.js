@@ -81,7 +81,21 @@ router.post("/", (req, res) => {
       "Aapko nausea ya vomiting ke symptoms lag rahe hain. Light food lein aur hydration maintain karein.";
     medicines.push("Ipecacuanha", "Tabacum");
   }
-
+  else if(msg.includes("Epilepsy") || msg.includes("seizure") || msg.includes("mirgi")) {
+    reply =
+      "Aapko epilepsy ya seizure ke symptoms lag rahe hain. Immediate medical attention lein.";
+    medicines.push("Consult Doctor");
+  }
+  else if(msg.includes("diabetes") || msg.includes("sugar") || msg.includes("madhumeh")) {
+    reply =
+      "Aapko diabetes ke symptoms lag rahe hain. Proper diet follow karein aur regular exercise karein.";
+    medicines.push("Syzigium", "Gymnema Sylvestre");
+  }
+  else if(msg.includes("Epistaxis") || msg.includes("nosebleed") || msg.includes("naak se khoon")) {
+    reply =
+      "Aapko nosebleed ke symptoms lag rahe hain. Naak ko gently pinch karein aur head ko thoda aage jhukayein.";
+    medicines.push("Hamamelis", "Phosphorus", "Ipecacuanha");
+  }
 
   else {
     reply =
