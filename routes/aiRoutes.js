@@ -49,28 +49,23 @@ router.post("/", (req, res) => {
   else if (msg.includes("headache") || msg.includes("sir dard") || msg.includes("migraine")) {
     reply =
       "Aapko headache ya migraine ho sakta hai. Rest karein aur dim light mein rahen.";
-    medicines.push("Natrum Muriaticum", "Sanguinaria");
+    medicines.push("Natrum Muriaticum", "Sanguinaria", "Spigelia");
   }
   else if (msg.includes("fatigue") || msg.includes("thakan") || msg.includes("weakness")) {
     reply =
       "Aapko fatigue ya weakness ho sakti hai. Proper rest lein aur balanced diet follow karein.";
-    medicines.push("Phosphoric Acid");
+    medicines.push("Phosphoric Acid", "China");
   }
   else if (msg.includes("cold") || msg.includes("flu") || msg.includes("sardi") || msg.includes("bukhar")) {
     reply =
       "Ye cold ya flu ke symptoms lag rahe hain. Garam pani piyein aur rest karein.";
-    medicines.push("Oscillococcinum", "Eupatorium Perfoliatum");
+    medicines.push("Eupatorium Perfoliatum");
   } 
   else if (msg.includes("diarrhea") || msg.includes("dast") || msg.includes("pet dard")) {
     reply =
       "Aapko diarrhea ke symptoms lag rahe hain. Hydration maintain karein aur light food lein.";
     medicines.push("Arsenicum Album", "Podophyllum");
   } 
-  else if (msg.includes("allergy") || msg.includes("rash") || msg.includes("itching")) {
-    reply =
-      "Ye allergy ke symptoms lag rahe hain. Affected area ko clean rakhein aur irritants se bachke rahen.";
-    medicines.push("Allium Cepa", "Urtica Urens");
-  }
   else if (msg.includes("insomnia") || msg.includes("neend nahi aati") || msg.includes("sleeplessness")) {
     reply =
       "Aapko insomnia ke symptoms lag rahe hain. Relaxation techniques try karein aur apne sleep hygiene ka dhyan rakhein.";
@@ -80,6 +75,11 @@ router.post("/", (req, res) => {
     reply =
       "Aapko constipation ke symptoms lag rahe hain. Proper diet follow karein aur hydration maintain karein.";
     medicines.push("Bryonia", "Nux Vomica");
+  }
+  else if(msg.includes("nausea") || msg.includes("vomiting") || msg.includes("ulti")) {
+    reply =
+      "Aapko nausea ya vomiting ke symptoms lag rahe hain. Light food lein aur hydration maintain karein.";
+    medicines.push("Ipecacuanha", "Tabacum");
   }
 
 
