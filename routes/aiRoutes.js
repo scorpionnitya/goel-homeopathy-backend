@@ -10,52 +10,36 @@ router.post("/", async (req, res) => {
     const { message } = req.body;
 
     const model = genAI.getGenerativeModel({
-      model: "models/gemini-1.5-flash"
+      model: "gemini-1.5-flash-latest",
     });
 
-    const prompt = `
-You are an expert AI homeopathy assistant.
+    const result = await model.generateContent(
+      `You are an expert AI homeopathy assistant.
 
 User problem:
 ${message}
 
-Rules:
-- Understand symptoms intelligently
-- Suggest suitable homeopathic medicines automatically
-- Give short precautions
-- Reply in simple Hindi-English language
-- Never leave medicine section blank
-- If disease is serious, advise doctor consultation
+Give:
+1. Problem analysis
+2. Suggested homeopathic medicines
+3. Precautions
 
-Format:
+Reply in simple Hindi-English.
+`
+    );
 
-Problem Analysis:
-...
-
-Suggested Medicines:
-1. ...
-2. ...
-
-Precautions:
-...
-
-Disclaimer:
-This is AI-generated guidance. Consult a doctor for serious conditions.
-`;
-
-    const result = await model.generateContent(prompt);
-
-    const response = result.response.text();
+    const response = await result.response;
+    const text = response.text();
 
     res.json({
-      reply: response
+      reply: text,
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("GEMINI ERROR:", error);
 
     res.status(500).json({
-      reply: "AI service error"
+      reply: "AI service error",
     });
   }
 });
