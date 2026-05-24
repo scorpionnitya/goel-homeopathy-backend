@@ -1,128 +1,50 @@
 const express = require("express");
 const router = express.Router();
 
-router.post("/", (req, res) => {
-  const { message } = req.body;
-  const msg = message.toLowerCase();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-  let reply = "";
-  let medicines = [];
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-  // 🔥 CONDITIONS
+router.post("/chat", async (req, res) => {
+  try {
+    const { message } = req.body;
 
-  if (msg.includes("fever") || msg.includes("bukhar")) {
-    reply =
-      "Aapko fever ke symptoms lag rahe hain. Body rest karein aur hydration maintain karein.";
-    medicines.push("Belladonna", "Gelsemium");
-  }
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash"
+    });
 
-  else if (msg.includes("cold") || msg.includes("zukham") || msg.includes("cough")) {
-    reply =
-      "Ye common cold ya cough lag raha hai. Garam pani piyein aur rest karein.";
-    medicines.push("Aconite", "Bryonia");
-  }
+    const prompt = `
+You are a helpful homeopathy medical assistant.
 
-  else if (msg.includes("pain") || msg.includes("dard") || msg.includes("injury")) {
-    reply =
-      "Aapko body pain ya injury ho sakti hai. Rest karein aur affected area ko stress na dein.";
-    medicines.push("Arnica");
-  }
+User problem:
+${message}
 
-  else if (msg.includes("stomach") || msg.includes("digestion") || msg.includes("pet")) {
-    reply =
-      "Ye digestion issue ho sakta hai. Light food lein aur hydration maintain karein.";
-    medicines.push("Nux Vomica");
-  }
+Give:
+1. Short explanation
+2. Suggested homeopathic medicines
+3. Simple precautions
 
-  else if (msg.includes("stress") || msg.includes("anxiety") || msg.includes("tension")) {
-    reply =
-      "Aapko stress ya anxiety ho sakti hai. Relaxation techniques try karein aur apne mental health ka dhyan rakhein.";
-    medicines.push("Ignatia");
-  }
+Keep response short and beginner friendly.
 
-  else if (msg.includes("skin") || msg.includes("rash") || msg.includes("allergy")) {
-    reply =
-      "Ye skin issue ya allergy ho sakta hai. Affected area ko clean rakhein aur irritants se bachke rahen.";
-    medicines.push("Rhus Toxicodendron");
-  }
-
-  else if (msg.includes("headache") || msg.includes("sir dard") || msg.includes("migraine")) {
-    reply =
-      "Aapko headache ya migraine ho sakta hai. Rest karein aur dim light mein rahen.";
-    medicines.push("Natrum Muriaticum", "Sanguinaria", "Spigelia");
-  }
-  else if (msg.includes("fatigue") || msg.includes("thakan") || msg.includes("weakness")) {
-    reply =
-      "Aapko fatigue ya weakness ho sakti hai. Proper rest lein aur balanced diet follow karein.";
-    medicines.push("Phosphoric Acid", "China");
-  }
-  else if (msg.includes("cold") || msg.includes("flu") || msg.includes("sardi") || msg.includes("bukhar")) {
-    reply =
-      "Ye cold ya flu ke symptoms lag rahe hain. Garam pani piyein aur rest karein.";
-    medicines.push("Eupatorium Perfoliatum");
-  } 
-  else if (msg.includes("diarrhea") || msg.includes("dast") || msg.includes("pet dard")) {
-    reply =
-      "Aapko diarrhea ke symptoms lag rahe hain. Hydration maintain karein aur light food lein.";
-    medicines.push("Arsenicum Album", "Podophyllum");
-  } 
-  else if (msg.includes("insomnia") || msg.includes("neend nahi aati") || msg.includes("sleeplessness")) {
-    reply =
-      "Aapko insomnia ke symptoms lag rahe hain. Relaxation techniques try karein aur apne sleep hygiene ka dhyan rakhein.";
-    medicines.push("Coffea Cruda", "Passiflora");
-  } 
-  else if (msg.includes("constipation") || msg.includes("kabj") || msg.includes("pet band")) {  
-    reply =
-      "Aapko constipation ke symptoms lag rahe hain. Proper diet follow karein aur hydration maintain karein.";
-    medicines.push("Bryonia", "Nux Vomica");
-  }
-  else if(msg.includes("nausea") || msg.includes("vomiting") || msg.includes("ulti")) {
-    reply =
-      "Aapko nausea ya vomiting ke symptoms lag rahe hain. Light food lein aur hydration maintain karein.";
-    medicines.push("Ipecacuanha", "Tabacum");
-  }
-  else if(msg.includes("Epilepsy") || msg.includes("seizure") || msg.includes("mirgi")) {
-    reply =
-      "Aapko epilepsy ya seizure ke symptoms lag rahe hain. Immediate medical attention lein.";
-    medicines.push("Consult Doctor");
-  }
-  else if(msg.includes("diabetes") || msg.includes("sugar") || msg.includes("madhumeh")) {
-    reply =
-      "Aapko diabetes ke symptoms lag rahe hain. Proper diet follow karein aur regular exercise karein.";
-    medicines.push("Syzigium", "Gymnema Sylvestre");
-  }
-  else if(msg.includes("Epistaxis") || msg.includes("nosebleed") || msg.includes("naak se khoon")) {
-    reply =
-      "Aapko nosebleed ke symptoms lag rahe hain. Naak ko gently pinch karein aur head ko thoda aage jhukayein.";
-    medicines.push("Hamamelis", "Phosphorus", "Ipecacuanha");
-  }
-
-  else if (msg.includes("back pain") || msg.includes("lower back pain") || msg.includes("kamr dard")) { 
-    reply =
-      "Aapko back pain ke symptoms lag rahe hain. Proper posture maintain karein aur regular stretching exercises karein.";
-    medicines.push("Rhus Toxicodendron", "Arnica");
-  }
-   else if (msg.includes("allergy") || msg.includes("allergic reaction") || msg.includes("allergy symptoms")) { 
-    reply =
-      "Aapko allergy ke symptoms lag rahe hain. Affected area ko clean rakhein aur irritants se bachke rahen.";
-    medicines.push("Rhus Toxicodendron", "Allium Cepa");
-  }
-
-   else if (msg.includes("sore throat") || msg.includes("gala dard") || msg.includes("throat pain")) { 
-    reply =
-      "Aapko sore throat ke symptoms lag rahe hain. Warm salt water gargle karein aur rest karein.";
-    medicines.push("Belladonna", "Mercurius Solubilis");
-  }
-
-  // 🔥 FINAL RESPONSE FORMAT
-  const fullReply = `
-${reply}
-
-Suggested Medicines:
-${medicines.join(", ")}
+Also add:
+"This is AI-generated guidance. Please consult a doctor for serious conditions."
 `;
 
-  res.json({ reply: fullReply });
+    const result = await model.generateContent(prompt);
+
+    const response = result.response.text();
+
+    res.json({
+      reply: response
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      reply: "AI service error"
+    });
+  }
 });
 
 module.exports = router;

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/orders", orderRoutes);
 app.use("/api/consultation", consultationRoutes);
 app.use("/api/chat", aiRoutes);
+app.use("/api", require("./routes/aiRoutes"));
 
 // mongodb
 mongoose.connect(process.env.MONGO_URI)
