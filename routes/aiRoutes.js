@@ -5,7 +5,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-router.post("/chat", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { message } = req.body;
 
@@ -14,20 +14,33 @@ router.post("/chat", async (req, res) => {
     });
 
     const prompt = `
-You are a helpful homeopathy medical assistant.
+You are an expert AI homeopathy assistant.
 
 User problem:
 ${message}
 
-Give:
-1. Short explanation
-2. Suggested homeopathic medicines
-3. Simple precautions
+Rules:
+- Understand symptoms intelligently
+- Suggest suitable homeopathic medicines automatically
+- Give short precautions
+- Reply in simple Hindi-English language
+- Never leave medicine section blank
+- If disease is serious, advise doctor consultation
 
-Keep response short and beginner friendly.
+Format:
 
-Also add:
-"This is AI-generated guidance. Please consult a doctor for serious conditions."
+Problem Analysis:
+...
+
+Suggested Medicines:
+1. ...
+2. ...
+
+Precautions:
+...
+
+Disclaimer:
+This is AI-generated guidance. Consult a doctor for serious conditions.
 `;
 
     const result = await model.generateContent(prompt);
