@@ -6,40 +6,35 @@ router.post("/", async (req, res) => {
     const { message } = req.body;
 
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/google/flan-t5-base",
+      "https://api.together.xyz/v1/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.HF_TOKEN}`,
+          Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          inputs: `
-You are an AI homeopathy assistant.
-
-Patient problem:
-${message}
-
-Suggest:
-- suitable homeopathic medicines
-- precautions
-- short advice
-
-Reply in simple Hindi-English.
-`,
+          model: "mistralai/Mistral-7B-Instruct-v0.1",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are an expert AI homeopathy assistant. Suggest medicines and precautions in Hindi-English.",
+            },
+            {
+              role: "user",
+              content: message,
+            },
+          ],
         }),
       }
     );
 
     const data = await response.json();
 
-    let reply = "No response";
-
-    if (Array.isArray(data) && data[0]?.generated_text) {
-      reply = data[0].generated_text;
-    }
-
-    res.json({ reply });
+    res.json({
+      reply: data.choices[0].message.content,
+    });
 
   } catch (error) {
     console.log(error);
