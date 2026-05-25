@@ -35,8 +35,6 @@ router.post("/", async (req, res) => {
     const data = await response.json();
 
     console.log(data);
-    res.json(data);
-return;
 
     const reply =
       data?.choices?.[0]?.message?.content ||
