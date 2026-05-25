@@ -1,38 +1,48 @@
 const express = require("express");
 const router = express.Router();
 
-const OpenAI = require("openai");
-
-const client = new OpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY,
-});
-
 router.post("/", async (req, res) => {
   try {
     const { message } = req.body;
 
-    const completion = await client.chat.completions.create({
-      model: "deepseek/deepseek-chat",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an expert homeopathy assistant. Suggest medicines and precautions in simple Hindi-English.",
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/google/flan-t5-large",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.HF_TOKEN}`,
+          "Content-Type": "application/json",
         },
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-    });
+        body: JSON.stringify({
+          inputs: `
+You are an AI homeopathy assistant.
 
-    res.json({
-      reply: completion.choices[0].message.content,
-    });
+Patient problem:
+${message}
+
+Suggest:
+- suitable homeopathic medicines
+- precautions
+- short advice
+
+Reply in simple Hindi-English.
+`,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    let reply = "No response";
+
+    if (Array.isArray(data) && data[0]?.generated_text) {
+      reply = data[0].generated_text;
+    }
+
+    res.json({ reply });
 
   } catch (error) {
-    console.log("OPENROUTER ERROR:", error);
+    console.log(error);
 
     res.status(500).json({
       reply: "AI service error",
