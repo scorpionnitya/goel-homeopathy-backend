@@ -33,8 +33,10 @@ router.post("/", async (req, res) => {
     const data = await response.json();
 
     res.json({
-      reply: data.choices[0].message.content,
-    });
+  reply:
+    data.choices?.[0]?.message?.content ||
+    "AI response not available",
+});
 
   } catch (error) {
     console.log(error);
