@@ -17,10 +17,8 @@ router.post("/", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: `
-You are an expert AI homeopathy assistant.
-Suggest medicines and precautions in simple Hindi-English.
-`,
+          content:
+            "You are an expert homeopathy assistant. Suggest medicines and precautions in simple Hindi-English.",
         },
         {
           role: "user",
@@ -34,7 +32,7 @@ Suggest medicines and precautions in simple Hindi-English.
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("OPENROUTER ERROR:", error);
 
     res.status(500).json({
       reply: "AI service error",
