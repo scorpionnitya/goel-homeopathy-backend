@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "meta-llama/Llama-3-8b-chat-hf",
+          model: "mistralai/Mistral-7B-Instruct-v0.2",
           messages: [
             {
               role: "system",
@@ -35,6 +35,11 @@ router.post("/", async (req, res) => {
     const data = await response.json();
 
     console.log(data);
+    if (data.error) {
+  return res.json({
+    reply: data.error.message || "AI model error",
+  });
+}
 
     const reply =
       data?.choices?.[0]?.message?.content ||
