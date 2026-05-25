@@ -1,39 +1,40 @@
 const express = require("express");
 const router = express.Router();
 
-const { GoogleGenAI } = require("@google/genai");
+const OpenAI = require("openai");
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+const client = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
 });
 
 router.post("/", async (req, res) => {
   try {
     const { message } = req.body;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: `
+    const completion = await client.chat.completions.create({
+      model: "deepseek/deepseek-chat",
+      messages: [
+        {
+          role: "system",
+          content: `
 You are an expert AI homeopathy assistant.
-
-User problem:
-${message}
-
-Give:
-1. Problem analysis
-2. Suggested homeopathic medicines
-3. Precautions
-
-Reply in simple Hindi-English.
+Suggest medicines and precautions in simple Hindi-English.
 `,
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
     });
 
     res.json({
-      reply: response.text,
+      reply: completion.choices[0].message.content,
     });
 
   } catch (error) {
-    console.log("GEMINI ERROR:", error);
+    console.log(error);
 
     res.status(500).json({
       reply: "AI service error",
