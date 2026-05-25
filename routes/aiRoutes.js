@@ -5,45 +5,46 @@ router.post("/", async (req, res) => {
   try {
     const { message } = req.body;
 
-    const response = await fetch(
-      "https://api.together.xyz/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "mistralai/Mistral-7B-Instruct-v0.2",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are an expert AI homeopathy assistant. Always suggest suitable homeopathic medicines, precautions and short advice in Hindi-English language.",
-            },
-            {
-              role: "user",
-              content: message,
-            },
-          ],
-          temperature: 0.7,
-          max_tokens: 300,
-        }),
-      }
-    );
+    let reply = "";
 
-    const data = await response.json();
+    const msg = message.toLowerCase();
 
-    console.log(data);
-    if (data.error) {
-  return res.json({
-    reply: data.error.message || "AI model error",
-  });
-}
+    // Fever
+    if (msg.includes("fever") || msg.includes("bukhar")) {
+      reply =
+        "Aapko fever ke symptoms lag rahe hain.\n\nSuggested Medicines:\n1. Belladonna\n2. Gelsemium\n\nPrecautions:\n- Rest karein\n- Hydration maintain karein";
+    }
 
-    const reply =
-      data?.choices?.[0]?.message?.content ||
-      "Medicine suggestion not available";
+    // Cold / Cough
+    else if (
+      msg.includes("cold") ||
+      msg.includes("cough") ||
+      msg.includes("khansi")
+    ) {
+      reply =
+        "Aapko cold/cough ke symptoms lag rahe hain.\n\nSuggested Medicines:\n1. Bryonia\n2. Aconite\n\nPrecautions:\n- Thanda paani avoid karein\n- Garam fluids lein";
+    }
+
+    // Weakness
+    else if (msg.includes("weakness")) {
+      reply =
+        "Aapko weakness lag rahi hai.\n\nSuggested Medicines:\n1. Alfalfa Tonic\n2. Kali Phos\n\nPrecautions:\n- Proper sleep lein\n- Healthy diet maintain karein";
+    }
+
+    // Headache
+    else if (
+      msg.includes("headache") ||
+      msg.includes("sar dard")
+    ) {
+      reply =
+        "Aapko headache ke symptoms lag rahe hain.\n\nSuggested Medicines:\n1. Belladonna\n2. Nux Vomica\n\nPrecautions:\n- Stress kam karein\n- Proper hydration rakhein";
+    }
+
+    // Default
+    else {
+      reply =
+        "Sorry, mujhe is problem ke liye medicine data nahi mila.\n\nPlease thoda aur clearly symptoms likhein.";
+    }
 
     res.json({ reply });
 
