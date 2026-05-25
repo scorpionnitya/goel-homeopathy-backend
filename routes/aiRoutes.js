@@ -14,29 +14,33 @@ router.post("/", async (req, res) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "mistralai/Mistral-7B-Instruct-v0.1",
+          model: "meta-llama/Llama-3-8b-chat-hf",
           messages: [
             {
               role: "system",
               content:
-                "You are an expert AI homeopathy assistant. Suggest medicines and precautions in Hindi-English.",
+                "You are an expert AI homeopathy assistant. Always suggest suitable homeopathic medicines, precautions and short advice in Hindi-English language.",
             },
             {
               role: "user",
               content: message,
             },
           ],
+          temperature: 0.7,
+          max_tokens: 300,
         }),
       }
     );
 
     const data = await response.json();
 
-    res.json({
-  reply:
-    data.choices?.[0]?.message?.content ||
-    "AI response not available",
-});
+    console.log(data);
+
+    const reply =
+      data?.choices?.[0]?.message?.content ||
+      "Medicine suggestion not available";
+
+    res.json({ reply });
 
   } catch (error) {
     console.log(error);
