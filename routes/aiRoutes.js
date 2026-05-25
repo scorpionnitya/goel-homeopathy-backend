@@ -6,7 +6,7 @@ router.post("/", async (req, res) => {
     const { message } = req.body;
 
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/google/flan-t5-large",
+      "https://api-inference.huggingface.co/models/google/flan-t5-base",
       {
         method: "POST",
         headers: {
