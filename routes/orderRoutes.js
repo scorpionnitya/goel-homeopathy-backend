@@ -64,13 +64,14 @@ router.get("/all", async (req, res) => {
 
 
 router.put("/update-status/:id", async (req, res) => {
+
   try {
 
     const { status } = req.body;
 
     let updateData = { status };
 
-    // Generate OTP when order goes out
+    // OTP generation
     if (status === "OUT FOR DELIVERY") {
 
       const otp = Math.floor(
@@ -82,36 +83,47 @@ router.put("/update-status/:id", async (req, res) => {
 
     // Delivered
     if (status === "DELIVERED") {
+
       updateData.isDelivered = true;
     }
 
+    // MongoDB update
     const updated = await Order.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true }
     );
+
+    // Google Sheet update
     await axios.post(
-  "https://script.google.com/macros/s/AKfycbzDM7JxKQNdrugt5EZ0LTiIoV4eXjK1gBMEzOX7RiENtV1nDKC-YlwBuu_Ev6E_yfgnxg/exec",
-  {
-    action: "UPDATE_STATUS",
+      "https://script.google.com/macros/s/AKfycbzDM7JxKQNdrugt5EZ0LTiIoV4eXjK1gBMEzOX7RiENtV1nDKC-YlwBuu_Ev6E_yfgnxg/exec",
+      {
 
-    orderId: updated._id.toString(),
+        action: "UPDATE_STATUS",
 
-    status: updated.status,
+        orderId: updated._id.toString(),
 
-    deliveryOTP: updated.deliveryOTP || "",
+        status: updated.status,
 
-    deliveredAt: updated.isDelivered
-      ? new Date().toLocaleString()
-      : "",
+        deliveryOTP:
+          updated.deliveryOTP || "",
 
-    paymentStatus: updated.paymentStatus
-  }
-);
+        deliveredAt:
+          updated.isDelivered
+            ? new Date().toLocaleString()
+            : "",
+
+        paymentStatus:
+          updated.paymentStatus || "PENDING"
+      }
+    );
 
     res.json(updated);
 
   } catch (error) {
+
+    console.log(error);
+
     res.status(500).json({
       message: "Server error"
     });
