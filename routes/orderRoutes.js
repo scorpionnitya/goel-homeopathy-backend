@@ -18,8 +18,10 @@ router.post("/", async (req, res) => {
 
     await newOrder.save();
     await axios.post(
-  "https://script.google.com/macros/s/AKfycbzDM7JxKQNdrugt5EZ0LTiIoV4eXjK1gBMEzOX7RiENtV1nDKC-YlwBuu_Ev6E_yfgnxg/exec",
+  "https://script.google.com/macros/s/AKfycbxWd-fJWYrV4MB50PSkwiScAj70U-B2-CSl8PWO-dIrLADoJ_aRJfxUf-dDYpqzRgzHvw/exec",
   {
+
+    
     orderId: newOrder._id.toString(),
 
     name: user.name,
@@ -96,7 +98,7 @@ router.put("/update-status/:id", async (req, res) => {
 
     // Google Sheet update
     await axios.post(
-      "https://script.google.com/macros/s/AKfycbzDM7JxKQNdrugt5EZ0LTiIoV4eXjK1gBMEzOX7RiENtV1nDKC-YlwBuu_Ev6E_yfgnxg/exec",
+      "https://script.google.com/macros/s/AKfycbxWd-fJWYrV4MB50PSkwiScAj70U-B2-CSl8PWO-dIrLADoJ_aRJfxUf-dDYpqzRgzHvw/exec",
       {
 
         action: "UPDATE_STATUS",
