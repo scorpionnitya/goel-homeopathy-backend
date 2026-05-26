@@ -90,6 +90,24 @@ router.put("/update-status/:id", async (req, res) => {
       updateData,
       { new: true }
     );
+    await axios.post(
+  "https://script.google.com/macros/s/AKfycbzDM7JxKQNdrugt5EZ0LTiIoV4eXjK1gBMEzOX7RiENtV1nDKC-YlwBuu_Ev6E_yfgnxg/exec",
+  {
+    action: "UPDATE_STATUS",
+
+    orderId: updated._id.toString(),
+
+    status: updated.status,
+
+    deliveryOTP: updated.deliveryOTP || "",
+
+    deliveredAt: updated.isDelivered
+      ? new Date().toLocaleString()
+      : "",
+
+    paymentStatus: updated.paymentStatus
+  }
+);
 
     res.json(updated);
 
