@@ -10,7 +10,13 @@ const aiRoutes = require("./routes/aiRoutes");
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://goel-homeopathy-frontend.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT"],
+  credentials: true
+}));
 app.use(express.json());
 
 // routes
