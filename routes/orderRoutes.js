@@ -25,29 +25,40 @@ router.post("/", async (req, res) => {
 });
 
 // ✅ GET ALL ORDERS
-router.get("/all", async (req, res) => {
-  try {
-    const orders = await Order.find().sort({ _id: -1 });
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// ✅ UPDATE STATUS
 router.put("/update-status/:id", async (req, res) => {
   try {
+
     const { status } = req.body;
+
+    let updateData = { status };
+
+    // Generate OTP when order goes out
+    if (status === "OUT FOR DELIVERY") {
+
+      const otp = Math.floor(
+        1000 + Math.random() * 9000
+      ).toString();
+
+      updateData.deliveryOTP = otp;
+    }
+
+    // Delivered
+    if (status === "DELIVERED") {
+      updateData.isDelivered = true;
+    }
 
     const updated = await Order.findByIdAndUpdate(
       req.params.id,
-      { status },
+      updateData,
       { new: true }
     );
 
     res.json(updated);
+
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error"
+    });
   }
 });
 
