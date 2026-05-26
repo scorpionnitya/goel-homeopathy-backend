@@ -25,6 +25,27 @@ router.post("/", async (req, res) => {
 });
 
 // ✅ GET ALL ORDERS
+router.get("/all", async (req, res) => {
+
+  try {
+
+    const orders = await Order.find().sort({
+      date: -1
+    });
+
+    res.json(orders);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: "Server error"
+    });
+
+  }
+
+});
+
+
 router.put("/update-status/:id", async (req, res) => {
   try {
 
