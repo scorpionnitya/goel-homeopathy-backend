@@ -5,13 +5,15 @@ const Order = require("../models/Order");
 // ✅ CREATE ORDER
 router.post("/", async (req, res) => {
   try {
-    const { items, user } = req.body;
+    const { items, user, totalAmount } = req.body;
 
     const newOrder = new Order({
-      items,
-      user,
-      status: "PENDING" // ✅ default
-    });
+  items,
+  user,
+  totalAmount,
+  paymentStatus: "PENDING",
+  status: "PENDING"
+});
 
     await newOrder.save();
 

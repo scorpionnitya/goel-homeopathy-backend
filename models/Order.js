@@ -4,15 +4,35 @@ const orderSchema = new mongoose.Schema({
   items: [
     {
       name: String,
-      price: String
+      price: String,
+      quantity: Number,
+      power: String
     }
   ],
+
   user: {
     name: String,
     phone: String,
     address: String
   },
-  status: String,
+
+  totalAmount: Number,
+
+  paymentStatus: {
+    type: String,
+    default: "PENDING"
+  },
+
+  paymentScreenshot: {
+    type: String,
+    default: ""
+  },
+
+  status: {
+    type: String,
+    default: "PENDING"
+  },
+
   date: {
     type: Date,
     default: Date.now
