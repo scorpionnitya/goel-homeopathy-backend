@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
+const axios = require("axios");
 
 // ✅ CREATE ORDER
 router.post("/", async (req, res) => {
@@ -16,6 +17,22 @@ router.post("/", async (req, res) => {
 });
 
     await newOrder.save();
+    await axios.post(
+  "https://script.google.com/macros/s/AKfycbzDM7JxKQNdrugt5EZ0LTiIoV4eXjK1gBMEzOX7RiENtV1nDKC-YlwBuu_Ev6E_yfgnxg/exec",
+  {
+    orderId: newOrder._id.toString(),
+
+    name: user.name,
+    phone: user.phone,
+    address: user.address,
+
+    medicines: items
+      .map(item => item.name)
+      .join(", "),
+
+    totalAmount
+  }
+);
 
     res.json({ message: "Order placed successfully" });
 
