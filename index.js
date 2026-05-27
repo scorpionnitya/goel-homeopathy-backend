@@ -12,7 +12,7 @@ const app = express();
 // middleware
 app.use(cors({
   origin: [
-    "https://goel-homeopathy-frontend.vercel.app"
+    "https://curenest-health.vercel.app"
   ],
   methods: ["GET", "POST", "PUT"],
   credentials: true
