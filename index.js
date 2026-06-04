@@ -11,9 +11,10 @@ const app = express();
 
 // middleware
 app.use(cors({
-  origin: [
-    "https://curenest-health.vercel.app"
-  ],
+origin: [
+  "https://curenest-health.vercel.app",
+  "http://localhost:3000"
+],
   methods: ["GET", "POST", "PUT"],
   credentials: true
 }));
