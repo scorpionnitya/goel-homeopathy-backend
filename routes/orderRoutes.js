@@ -17,25 +17,43 @@ router.post("/", async (req, res) => {
 });
 
     await newOrder.save();
-    await axios.post(
-  "https://script.google.com/macros/s/AKfycbxWd-fJWYrV4MB50PSkwiScAj70U-B2-CSl8PWO-dIrLADoJ_aRJfxUf-dDYpqzRgzHvw/exec",
-  {
+try {
 
-    
-    orderId: newOrder._id.toString(),
+  await axios.post(
+    "https://script.google.com/macros/s/AKfycbxWd-fJWYrV4MB50PSkwiScAj70U-B2-CSl8PWO-dIrLADoJ_aRJfxUf-dDYpqzRgzHvw/exec",
+    {
 
-    name: user.name,
-    phone: user.phone,
-    address: user.address,
+      orderId:
+        newOrder._id.toString(),
 
-    medicines: items
-      .map(item => item.name)
-      .join(", "),
+      name:
+        user.name,
 
-    totalAmount
-  }
-);
+      phone:
+        user.phone,
 
+      address:
+        user.address,
+
+      medicines:
+        items
+          .map(
+            item => item.name
+          )
+          .join(", "),
+
+      totalAmount
+    }
+  );
+
+} catch (sheetError) {
+
+  console.log(
+    "Google Sheet Error:",
+    sheetError.message
+  );
+
+}
     res.json({ message: "Order placed successfully" });
 
   } catch (error) {
