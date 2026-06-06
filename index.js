@@ -6,6 +6,7 @@ const cors = require("cors");
 const consultationRoutes = require("./routes/consultationRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const aiRoutes = require("./routes/aiRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -25,7 +26,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/consultation", consultationRoutes);
 app.use("/api/chat", aiRoutes);
 app.use("/api", require("./routes/aiRoutes"));
-
+app.use("/api/auth",authRoutes);
 // mongodb
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected"))
