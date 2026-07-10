@@ -8,7 +8,44 @@ router.post("/", async (req, res) => {
   try {
     const { items, user, totalAmount } = req.body;
 
-    const newOrder = new Order({
+    // Generate Professional Order ID
+
+const now = new Date();
+
+const year =
+  now.getFullYear().toString().slice(-2);
+
+const month =
+  String(now.getMonth() + 1).padStart(2, "0");
+
+const day =
+  String(now.getDate()).padStart(2, "0");
+
+// Count today's orders
+
+const todayStart = new Date(
+  now.getFullYear(),
+  now.getMonth(),
+  now.getDate()
+);
+
+const todayEnd = new Date(
+  now.getFullYear(),
+  now.getMonth(),
+  now.getDate() + 1
+);
+
+const todayOrders = await Order.countDocuments({
+  date: {
+    $gte: todayStart,
+    $lt: todayEnd
+  }
+});
+
+const orderId =
+  `HM${year}${month}${day}${String(todayOrders + 1).padStart(3, "0")}`;
+  const newOrder = new Order({
+  orderId,
   items,
   user,
   totalAmount,
@@ -24,7 +61,7 @@ try {
     {
 
       orderId:
-        newOrder._id.toString(),
+  newOrder.orderId,
 
       name:
         user.name,
@@ -54,7 +91,10 @@ try {
   );
 
 }
-    res.json({ message: "Order placed successfully" });
+    res.json({
+  success: true,
+  orderId: newOrder.orderId
+});
 
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -121,7 +161,7 @@ router.put("/update-status/:id", async (req, res) => {
 
         action: "UPDATE_STATUS",
 
-        orderId: updated._id.toString(),
+        orderId: updated.orderId,
 
         status: updated.status,
 
