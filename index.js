@@ -14,9 +14,11 @@ const app = express();
 app.use(cors({
 origin: [
   "https://curenest-health.vercel.app",
-  "http://localhost:3000"
+  "http://localhost:3000",
+  "https://homiscare.in",
+  "https://www.homiscare.in"
 ],
-  methods: ["GET", "POST", "PUT"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 app.use(express.json());
