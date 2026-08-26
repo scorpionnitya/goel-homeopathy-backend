@@ -7,6 +7,7 @@ const router = express.Router();
 console.log("GEMINI_API_KEY present:", !!process.env.GEMINI_API_KEY);
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
+  vertexai: false,
 });
 
 router.post("/", async (req, res) => {
