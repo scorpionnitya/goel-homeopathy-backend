@@ -4,7 +4,7 @@ const express = require("express");
 const { GoogleGenAI } = require("@google/genai");
 
 const router = express.Router();
-
+console.log("GEMINI_API_KEY present:", !!process.env.GEMINI_API_KEY);
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
